@@ -7,4 +7,9 @@ This website serves as a tool to generate random passwords based on user-defined
 4. Password Copying: Users can easily copy the generated password to their clipboard by clicking the "Copy" button.
 5. Password Strength Indicator: The website evaluates the strength of the generated password based on its length and displays a strength indicator with text and color-coded feedback.
 6. Styling: The website has a clean and modern design, with a white background container placed on a gradient background. Input fields, buttons, and labels are styled for clarity and ease of use.
+Technologies Used:
 
+HTML: Markup language for structuring the web page.
+CSS: Stylesheet language for styling the elements of the web page.
+JavaScript: Programming language for implementing interactive features and functionality on the web page.
+"But All Mixed In Html"
