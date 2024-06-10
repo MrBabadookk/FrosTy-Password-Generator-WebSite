@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Password Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+            color: #666;
+        }
+        input[type="number"], input[type="text"], button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        button {
+            background-color: #6e8efb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #a777e3;
+        }
+        input[type="text"] {
+            background: #f0f0f0;
+            border: none;
+        }
+        .strength {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Random Password Generator</h1>
+        <label for="length">Password Length:</label>
+        <input type="number" id="length" min="1" max="128" value="12">
+
+        <label>
+            <input type="checkbox" id="uppercase" checked>
+            Include Uppercase Letters
+        </label>
+        <label>
+            <input type="checkbox" id="lowercase" checked>
+            Include Lowercase Letters
+        </label>
+        <label>
+            <input type="checkbox" id="numbers" checked>
+            Include Numbers
+        </label>
+        <label>
+            <input type="checkbox" id="special" checked>
+            Include Special Characters
+        </label>
+
+        <button onclick="generatePassword()">Generate Password</button>
+
+        <input type="text" id="password" readonly placeholder="Your password will appear here">
+        <button onclick="copyPassword()">Copy</button>
+        <div id="strength" class="strength"></div>
+    </div>
+
+    <script>
+        function generatePassword() {
+            const length = document.getElementById('length').value;
+            const includeUppercase = document.getElementById('uppercase').checked;
+            const includeLowercase = document.getElementById('lowercase').checked;
+            const includeNumbers = document.getElementById('numbers').checked;
+            const includeSpecial = document.getElementById('special').checked;
+
+            const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+            const numberChars = '0123456789';
+            const specialChars = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
+            let allChars = '';
+            if (includeUppercase) allChars += uppercaseChars;
+            if (includeLowercase) allChars += lowercaseChars;
+            if (includeNumbers) allChars += numberChars;
+            if (includeSpecial) allChars += specialChars;
+
+            if (allChars === '') {
+                document.getElementById('password').value = '';
+                alert('Please select at least one character set');
+                return;
+            }
+
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * allChars.length);
+                password += allChars[randomIndex];
+            }
+            document.getElementById('password').value = password;
+            evaluateStrength(password);
+        }
+
+        function copyPassword() {
+            const passwordField = document.getElementById('password');
+            if (!passwordField.value) {
+                alert("Generate a password first before copying!");
+                return;
+            }
+            passwordField.select();
+            passwordField.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand('copy');
+
+            // Alert the copied text
+            alert("Copied the password: " + passwordField.value);
+        }
+
+        function evaluateStrength(password) {
+            const strengthDiv = document.getElementById('strength');
+            const length = password.length;
+            let strengthText = '';
+            let strengthColor = '';
+
+            if (length <= 7) {
+                strengthText = 'Very Weak';
+                strengthColor = 'red';
+            } else if (length >= 8 && length <= 11) {
+                strengthText = 'Weak';
+                strengthColor = 'orange';
+            } else if (length >= 12 && length <= 19) {
+                strengthText = 'Moderate';
+                strengthColor = 'yellow';
+            } else if (length >= 20 && length <= 24) {
+                strengthText = 'Good';
+                strengthColor = 'lightgreen';
+            } else if (length >= 25 && length <= 30) {
+                strengthText = 'Very Good';
+                strengthColor = 'green';
+            } else if (length >= 31 && length <= 40) {
+                strengthText = 'Strong';
+                strengthColor = 'blue';
+            } else {
+                strengthText = 'Very Strong';
+                strengthColor = 'darkblue';
+            }
+
+            strengthDiv.textContent = `Strength: ${strengthText}`;
+            strengthDiv.style.color = strengthColor;
+        }
+    </script>
+</body>
+</html>
